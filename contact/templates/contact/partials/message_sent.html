@@ -1,0 +1,5 @@
+{# The full HTMX response to a successful message send: the new
+   bubble (goes to the primary hx-target, #message-list) plus a fresh
+   OOB-swapped form (clears the textarea) — see message_form.html. #}
+{% include "contact/partials/message_bubble.html" %}
+{% include "contact/partials/message_form.html" %}

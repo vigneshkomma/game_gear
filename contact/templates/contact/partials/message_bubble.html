@@ -1,0 +1,7 @@
+{# One chat bubble. Rendered in a loop by conversation_detail.html on
+   page load, and appended once at a time (via hx-swap="beforeend")
+   when a new message is sent. #}
+<div class="message-bubble {% if msg.sender_id == profile.id %}message-bubble--own{% endif %}">
+  <div class="message-bubble__meta mono">{{ msg.sender }} &middot; {{ msg.created_at|date:"d M, H:i" }}</div>
+  <div class="message-bubble__text">{{ msg.text }}</div>
+</div>

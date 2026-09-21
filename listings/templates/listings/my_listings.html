@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}My listings — GameBazaar{% endblock %}
+
+{% block content %}
+  <div class="ledger-row" style="border-bottom:none;">
+    <h1>My listings</h1>
+    <a href="{% url 'listings:create' %}" class="btn btn--primary">Sell an item</a>
+  </div>
+
+  {% if listings %}
+    <div class="panel">
+      {% for listing in listings %}
+        <div class="ledger-row">
+          <div>
+            <a href="{% url 'listings:detail' listing.slug %}"><strong>{{ listing.title }}</strong></a>
+            <div style="color: var(--ink-muted); font-size:0.9rem;">
+              {% if listing.status == "draft" %}<span class="badge badge--muted">Draft</span>{% endif %}
+              {% if listing.status == "active" %}<span class="badge badge--trust">Active</span>{% endif %}
+              {% if listing.status == "reserved" %}<span class="badge badge--muted">Reserved</span>{% endif %}
+              {% if listing.status == "purchased" %}<span class="badge badge--muted">Purchased</span>{% endif %}
+              &middot; {{ listing.views_count }} view{{ listing.views_count|pluralize }}
+            </div>
+          </div>
+          <span class="price-tag">{{ listing.price }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>You haven't listed anything yet.</p>
+      <a href="{% url 'listings:create' %}" class="btn btn--primary">Sell your first item</a>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{# Used both on initial page load (listing_detail.html includes this)
+   and as the HTMX swap target — wishlist_toggle_view returns this same
+   partial, and hx-swap="outerHTML" replaces the whole form with the
+   new state, so the button flips ♡ → ♥ with no page reload. #}
+<form
+  method="post"
+  action="{% url 'listings:wishlist_toggle' listing.slug %}"
+  hx-post="{% url 'listings:wishlist_toggle' listing.slug %}"
+  hx-target="this"
+  hx-swap="outerHTML"
+  style="display:inline;"
+>
+  {% csrf_token %}
+  <button type="submit" class="btn {% if is_wishlisted %}btn--secondary{% else %}btn--primary{% endif %}">
+    {% if is_wishlisted %}&#9829; Wishlisted{% else %}&#9825; Add to wishlist{% endif %}
+  </button>
+</form>

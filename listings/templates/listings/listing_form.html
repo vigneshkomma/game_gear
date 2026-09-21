@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.pk %}Edit listing{% else %}Sell an item{% endif %} — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>{% if form.instance.pk %}Edit listing{% else %}Sell an item{% endif %}</h1>
+
+  <form method="post" enctype="multipart/form-data" class="panel">
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="{{ form.category.id_for_label }}">Category</label>
+      {{ form.category }}
+      {% if form.category.errors %}<div class="field-errors">{{ form.category.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.title.id_for_label }}">Title</label>
+      {{ form.title }}
+      {% if form.title.errors %}<div class="field-errors">{{ form.title.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.description.id_for_label }}">Description</label>
+      {{ form.description }}
+      {% if form.description.errors %}<div class="field-errors">{{ form.description.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.condition.id_for_label }}">Condition</label>
+      {{ form.condition }}
+      {% if form.condition.errors %}<div class="field-errors">{{ form.condition.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.price.id_for_label }}">Price (&#8377;)</label>
+      {{ form.price }}
+      {% if form.price.errors %}<div class="field-errors">{{ form.price.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field checkbox-field">
+      {{ form.is_negotiable }}
+      <label for="{{ form.is_negotiable.id_for_label }}">Price is negotiable</label>
+    </div>
+
+    <div class="field">
+      <label for="{{ form.quantity.id_for_label }}">Quantity</label>
+      {{ form.quantity }}
+      {% if form.quantity.errors %}<div class="field-errors">{{ form.quantity.errors }}</div>{% endif %}
+    </div>
+
+    <h3>Specs</h3>
+    <!-- Populated on load with whatever the current category has, and
+         replaced live via HTMX whenever the category dropdown above
+         changes — see ListingForm.__init__ (hx-get on the category
+         field) and listing_specs_fields_view. -->
+    <div id="specs-fields">
+      {% include "listings/partials/specs_fields.html" %}
+    </div>
+
+    <h3>Photos</h3>
+    {{ image_formset.management_form }}
+    {% for image_form in image_formset %}
+      <div class="field" style="border-bottom:1px solid var(--hairline); padding-bottom:12px;">
+        {{ image_form.id }}
+        <label>{{ image_form.image.label }}</label>
+        {{ image_form.image }}
+        <div class="checkbox-field" style="margin-top:6px;">
+          {{ image_form.is_primary }}
+          <label>{{ image_form.is_primary.label }}</label>
+        </div>
+        {% if image_form.instance.pk %}
+          <div class="checkbox-field" style="margin-top:6px;">
+            {{ image_form.DELETE }}
+            <label>Remove this photo</label>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="btn-row" style="margin-top:24px;">
+      <button type="submit" class="btn btn--primary">Save listing</button>
+      <a href="{% url 'listings:my_listings' %}" class="btn btn--secondary">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

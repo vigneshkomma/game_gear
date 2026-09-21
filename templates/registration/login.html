@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Log in — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>Log in</h1>
+
+  {% if form.non_field_errors %}
+    <div class="field-errors" style="margin-bottom: 16px;">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <form method="post" class="panel" novalidate>
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="{{ form.username.id_for_label }}">Username</label>
+      {{ form.username }}
+      {% if form.username.errors %}<div class="field-errors">{{ form.username.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.password.id_for_label }}">Password</label>
+      {{ form.password }}
+      {% if form.password.errors %}<div class="field-errors">{{ form.password.errors }}</div>{% endif %}
+    </div>
+
+    <input type="hidden" name="next" value="{{ next }}">
+
+    <button type="submit" class="btn btn--primary">Log in</button>
+  </form>
+
+  <p>
+    New here? <a href="{% url 'users:signup' %}">Create an account</a><br>
+    <a href="{% url 'password_reset' %}">Forgot your password?</a>
+  </p>
+{% endblock %}

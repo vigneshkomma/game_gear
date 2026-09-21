@@ -1,0 +1,15 @@
+<!-- Swapped into #specs-fields by HTMX whenever the category select
+     changes (see forms.py ListingForm — hx-get, hx-target="#specs-fields").
+     Rendered standalone by listing_specs_fields_view, and also included
+     directly inside listing_form.html on first page load. -->
+{% for field in specs_form %}
+  <div class="form-field">
+    {{ field.label_tag }}
+    {{ field }}
+    {% if field.errors %}
+      <div class="field-errors">{{ field.errors }}</div>
+    {% endif %}
+  </div>
+{% empty %}
+  <p class="text-muted">Pick a category above to see its spec fields.</p>
+{% endfor %}

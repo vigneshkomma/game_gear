@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ conversation.listing.title }} — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>{{ conversation.listing.title }}</h1>
+  <p>
+    <a href="{% url 'listings:detail' conversation.listing.slug %}">View listing</a>
+    &middot;
+    with
+    {% if profile == conversation.buyer %}{{ conversation.seller }}{% else %}{{ conversation.buyer }}{% endif %}
+  </p>
+
+  <div class="panel">
+    <div id="message-list" class="message-list">
+      {% for msg in thread_messages %}
+        {% include "contact/partials/message_bubble.html" %}
+      {% empty %}
+        <p style="color: var(--ink-muted);">No messages yet — say hello.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    {% include "contact/partials/message_form.html" %}
+  </div>
+{% endblock %}

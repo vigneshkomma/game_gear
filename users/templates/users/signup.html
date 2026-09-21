@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Sign up — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>Create your account</h1>
+  <p>You'll verify your phone number before you can list anything for sale.</p>
+
+  <form method="post" class="panel" novalidate>
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="{{ form.username.id_for_label }}">Username</label>
+      {{ form.username }}
+      {% if form.username.errors %}<div class="field-errors">{{ form.username.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.email.id_for_label }}">Email</label>
+      {{ form.email }}
+      {% if form.email.errors %}<div class="field-errors">{{ form.email.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.phone_number.id_for_label }}">Phone number</label>
+      {{ form.phone_number }}
+      <div class="field-help">{{ form.phone_number.help_text }}</div>
+      {% if form.phone_number.errors %}<div class="field-errors">{{ form.phone_number.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.password1.id_for_label }}">Password</label>
+      {{ form.password1 }}
+      {% if form.password1.errors %}<div class="field-errors">{{ form.password1.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.password2.id_for_label }}">Confirm password</label>
+      {{ form.password2 }}
+      {% if form.password2.errors %}<div class="field-errors">{{ form.password2.errors }}</div>{% endif %}
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="field-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <button type="submit" class="btn btn--primary">Create account</button>
+  </form>
+
+  <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+{% endblock %}

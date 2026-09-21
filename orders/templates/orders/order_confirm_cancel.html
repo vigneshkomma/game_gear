@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Cancel order — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>Cancel this order?</h1>
+
+  <div class="panel">
+    <p><strong>{{ order.listing.title }}</strong> &mdash; <span class="price-tag">{{ order.price }}</span></p>
+    <p style="color: var(--ink-muted);">The listing goes back on the market once cancelled.</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="btn-row">
+        <button type="submit" class="btn btn--danger">Cancel order</button>
+        <a href="{% url 'orders:detail' order.pk %}" class="btn btn--secondary">Never mind</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

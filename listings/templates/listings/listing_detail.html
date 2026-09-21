@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ listing.title }} — GameBazaar{% endblock %}
+
+{% block content %}
+  <div class="ledger-row" style="border-bottom:none; align-items:flex-start;">
+    <div>
+      <h1 style="margin-bottom:4px;">{{ listing.title }}</h1>
+      <div style="color: var(--ink-muted);">
+        {{ listing.category.name }} &middot; {{ listing.get_condition_display }} &middot; {{ listing.city }}, {{ listing.get_state_display }}
+      </div>
+      <div style="margin-top:8px;">
+        {% if listing.status == "active" %}<span class="badge badge--trust">Active</span>{% endif %}
+        {% if listing.status == "reserved" %}<span class="badge badge--muted">Reserved</span>{% endif %}
+        {% if listing.status == "purchased" %}<span class="badge badge--muted">Purchased</span>{% endif %}
+        {% if listing.status == "draft" %}<span class="badge badge--muted">Draft</span>{% endif %}
+      </div>
+    </div>
+    <span class="price-tag" style="font-size:1.5rem;">{{ listing.price }}</span>
+  </div>
+
+  {% if listing.images.all %}
+    <div class="panel" style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;">
+      {% for image in listing.images.all %}
+        <img src="{{ image.image.url }}" alt="" style="width:140px; height:140px; object-fit:cover; border:1px solid var(--hairline); border-radius: var(--radius);">
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="panel" style="margin-top:16px;">
+    <h3>Description</h3>
+    <p>{{ listing.description }}</p>
+  </div>
+
+  {% if listing.specs.all %}
+    <div class="panel" style="margin-top:16px;">
+      <h3>Specs</h3>
+      {% for spec in listing.specs.all %}
+        <div class="ledger-row">
+          <span>{{ spec.attribute.name }}</span>
+          <span class="mono">{{ spec.value }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="panel" style="margin-top:16px;">
+    <div class="ledger-row">
+      <div>
+        <strong>{{ listing.seller.user.username }}</strong>
+        {% if listing.seller.is_seller_verified %}<span class="badge badge--trust">Verified</span>{% endif %}
+        <div style="color: var(--ink-muted); font-size:0.9rem;">
+          {% if listing.seller.rating_count %}
+            {{ listing.seller.rating_avg }} / 5 &middot; {{ listing.seller.rating_count }} review{{ listing.seller.rating_count|pluralize }}
+          {% else %}
+            No reviews yet
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row" style="margin-top:24px;">
+    {% if user.is_authenticated and user.profile == listing.seller %}
+      <a href="{% url 'listings:edit' listing.slug %}" class="btn btn--secondary">Edit listing</a>
+      {% if listing.status == "draft" %}
+        <form method="post" action="{% url 'listings:publish' listing.slug %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn--primary">Publish</button>
+        </form>
+      {% endif %}
+      <a href="{% url 'listings:delete' listing.slug %}" class="btn btn--danger">Remove</a>
+    {% elif user.is_authenticated %}
+      {% include "listings/partials/wishlist_button.html" %}
+      {% if listing.status == "active" %}
+        <a href="{% url 'orders:create' listing.slug %}" class="btn btn--primary">Buy now</a>
+      {% endif %}
+      <a href="{% url 'contact:start' listing.slug %}" class="btn btn--secondary">Message seller</a>
+    {% else %}
+      <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn--primary">Log in to buy or message</a>
+    {% endif %}
+  </div>
+{% endblock %}

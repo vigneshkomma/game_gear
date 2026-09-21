@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Orders — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>Your orders</h1>
+
+  {% if orders %}
+    <div class="panel">
+      {% for order in orders %}
+        <a href="{% url 'orders:detail' order.pk %}" style="display:block; color: inherit;">
+          <div class="ledger-row">
+            <div>
+              <strong>{{ order.listing.title }}</strong>
+              <div style="color: var(--ink-muted); font-size:0.9rem;">
+                {% if order.buyer == profile %}You bought this{% else %}You sold this{% endif %}
+                &middot; {{ order.get_status_display }}
+              </div>
+            </div>
+            <span class="price-tag">{{ order.price }}</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No orders yet.</p>
+      <a href="{% url 'listings:list' %}" class="btn btn--primary">Browse listings</a>
+    </div>
+  {% endif %}
+{% endblock %}

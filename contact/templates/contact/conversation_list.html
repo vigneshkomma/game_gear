@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Messages — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>Messages</h1>
+
+  {% if conversations %}
+    <div class="panel">
+      {% for conversation in conversations %}
+        <a href="{% url 'contact:detail' conversation.pk %}" style="display:block; color: inherit;">
+          <div class="ledger-row">
+            <div>
+              <strong>{{ conversation.listing.title }}</strong>
+              <div style="color: var(--ink-muted); font-size:0.9rem;">
+                {% if profile == conversation.buyer %}
+                  with {{ conversation.seller }}
+                {% else %}
+                  with {{ conversation.buyer }}
+                {% endif %}
+                {% if conversation.last_message %}
+                  &middot; {{ conversation.last_message.created_at|date:"d M, H:i" }}
+                {% endif %}
+              </div>
+            </div>
+            {% if conversation.unread_count %}
+              <span class="badge badge--trust">{{ conversation.unread_count }} new</span>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No conversations yet — message a seller from any listing page to start one.</p>
+    </div>
+  {% endif %}
+{% endblock %}

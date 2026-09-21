@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Remove listing — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>Remove this listing?</h1>
+
+  <div class="panel">
+    <p><strong>{{ listing.title }}</strong> &mdash; <span class="price-tag">{{ listing.price }}</span></p>
+    <p style="color: var(--ink-muted);">
+      This takes it off the market. Existing orders and reviews tied to it are kept.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="btn-row">
+        <button type="submit" class="btn btn--danger">Remove listing</button>
+        <a href="{% url 'listings:detail' listing.slug %}" class="btn btn--secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

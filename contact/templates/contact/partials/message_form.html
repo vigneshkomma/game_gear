@@ -1,0 +1,23 @@
+{# Reused two ways:
+   1. included directly in conversation_detail.html on normal page load
+   2. returned by conversation_detail_view on every HTMX POST, marked
+      hx-swap-oob="true" so htmx swaps it into #message-form separately
+      from the main response target — this is what clears the textarea
+      after sending (a fresh unbound MessageForm) or re-shows an error
+      (a bound MessageForm with .errors) without a page reload.
+   hx-swap-oob is inert on normal page load — it only takes effect when
+   this markup arrives as part of an htmx response. #}
+<form
+  id="message-form"
+  hx-swap-oob="true"
+  method="post"
+  action="{% url 'contact:detail' conversation.pk %}"
+  hx-post="{% url 'contact:detail' conversation.pk %}"
+  hx-target="#message-list"
+  hx-swap="beforeend"
+>
+  {% csrf_token %}
+  {{ form.text }}
+  {% if form.text.errors %}<div class="field-errors">{{ form.text.errors }}</div>{% endif %}
+  <button type="submit" class="btn btn--primary">Send</button>
+</form>

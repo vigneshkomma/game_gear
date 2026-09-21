@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Your addresses — GameBazaar{% endblock %}
+
+{% block content %}
+  <div class="ledger-row" style="border-bottom:none;">
+    <h1>Your addresses</h1>
+    <a href="{% url 'users:address_create' %}" class="btn btn--primary">Add address</a>
+  </div>
+
+  {% if addresses %}
+    <div class="panel">
+      {% for address in addresses %}
+        <div class="ledger-row">
+          <div>
+            <strong>{{ address.label|default:"Address" }}</strong>
+            {% if address.is_default %}<span class="badge badge--trust">Default</span>{% endif %}
+            <div>{{ address.full_name }} &middot; <span class="mono">{{ address.phone }}</span></div>
+            <div>{{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}</div>
+            <div>{{ address.city }}, {{ address.get_state_display }} &mdash; <span class="mono">{{ address.pincode }}</span></div>
+          </div>
+          <div class="btn-row">
+            <a href="{% url 'users:address_edit' address.pk %}" class="btn btn--secondary">Edit</a>
+            <a href="{% url 'users:address_delete' address.pk %}" class="btn btn--danger">Remove</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No saved addresses yet. Add one so sellers know where to ship.</p>
+      <a href="{% url 'users:address_create' %}" class="btn btn--primary">Add your first address</a>
+    </div>
+  {% endif %}
+{% endblock %}

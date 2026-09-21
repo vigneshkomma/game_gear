@@ -1,0 +1,29 @@
+{# Same pattern as the category → specs fix in listings: the element
+   that changes (the <select>) carries hx-post/hx-target itself, and
+   relies on its enclosing <form> only to supply the CSRF token — htmx
+   auto-includes the closest form's fields alongside the triggering
+   element's own value, so no hx-include is needed here.
+
+   order_detail_view includes this on page load; order_status_update_view
+   returns this same partial on every HTMX POST, and hx-swap="outerHTML"
+   replaces the whole #order-status block with the new state. #}
+<div id="order-status">
+  {% if can_update_status %}
+    <form style="display:inline;">
+      {% csrf_token %}
+      <select
+        name="status"
+        hx-post="{% url 'orders:status_update' order.pk %}"
+        hx-target="#order-status"
+        hx-swap="outerHTML"
+        hx-trigger="change"
+      >
+        {% for value, label in status_choices %}
+          <option value="{{ value }}" {% if value == order.status %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  {% else %}
+    <span class="badge badge--muted mono">{{ order.get_status_display }}</span>
+  {% endif %}
+</div>

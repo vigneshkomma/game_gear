@@ -1,0 +1,368 @@
+/* ============================================================
+   GameBazaar — base stylesheet
+   Ledger/price-tag design language. See chat for the full token
+   rationale. Tokens live as CSS custom properties so every page
+   pulls from the same palette/type scale.
+   ============================================================ */
+
+:root {
+  /* Color */
+  --paper: #ECEDE7;
+  --panel: #F5F5F1;
+  --ink: #1B1F1D;
+  --ink-muted: #6B6F68;
+  --hairline: #D8D9D1;
+  --accent: #E8571C;
+  --accent-ink: #FFFFFF;
+  --trust: #2F6F62;
+  --trust-tint: #E4EEEC;
+  --danger: #B23A2E;
+  --danger-tint: #F6E6E3;
+
+  /* Type */
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
+
+  /* Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+
+  --radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--trust); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  margin: 0 0 var(--space-3);
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); }
+h3 { font-size: 1.2rem; }
+
+p { max-width: 62ch; margin: 0 0 var(--space-3); }
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Layout shell ---------- */
+
+.site-header {
+  border-bottom: 1px solid var(--hairline);
+  background: var(--panel);
+}
+
+.site-header__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.brand:hover { text-decoration: none; }
+
+.brand span { color: var(--accent); }
+
+.site-nav {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.site-nav a {
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.site-nav a:hover { color: var(--accent); text-decoration: none; }
+
+.nav-logout-form { display: inline; }
+
+.nav-logout-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.nav-logout-btn:hover { color: var(--accent); }
+
+.site-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-6);
+}
+
+.site-main--narrow { max-width: 560px; }
+
+.site-footer {
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+
+/* ---------- Messages ---------- */
+
+.messages { list-style: none; margin: 0 0 var(--space-4); padding: 0; }
+
+.message {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--ink-muted);
+  background: var(--panel);
+  margin-bottom: var(--space-2);
+  font-size: 0.95rem;
+}
+
+.message--success { border-left-color: var(--trust); }
+.message--error { border-left-color: var(--danger); background: var(--danger-tint); }
+.message--info { border-left-color: var(--accent); }
+
+/* ---------- Panels (ledger, not cards) ---------- */
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+.panel + .panel { margin-top: var(--space-3); }
+
+.ledger-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.ledger-row:last-child { border-bottom: none; }
+
+/* ---------- Price / tag device ---------- */
+
+.price-tag {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.price-tag::before { content: "\20B9"; margin-right: 2px; opacity: 0.7; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+
+.badge--trust { color: var(--trust); background: var(--trust-tint); }
+.badge--muted { color: var(--ink-muted); background: transparent; }
+
+/* ---------- Forms ---------- */
+
+form .field { margin-bottom: var(--space-4); }
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+  color: var(--ink);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+input[type="number"],
+input[name*="phone"],
+input[name*="pincode"] {
+  font-family: var(--font-mono);
+}
+
+textarea { resize: vertical; min-height: 90px; }
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+}
+
+.field-help {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-top: var(--space-1);
+}
+
+.field-errors {
+  font-size: 0.85rem;
+  color: var(--danger);
+  margin-top: var(--space-1);
+}
+
+.checkbox-field { display: flex; align-items: center; gap: var(--space-2); }
+.checkbox-field input { width: auto; }
+.checkbox-field label { margin: 0; font-weight: 400; }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn:hover { text-decoration: none; }
+
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: #cf4c17; }
+
+.btn--secondary { background: transparent; color: var(--ink); border-color: var(--hairline); }
+.btn--secondary:hover { border-color: var(--ink); }
+
+.btn--danger { background: transparent; color: var(--danger); border-color: var(--danger); }
+.btn--danger:hover { background: var(--danger-tint); }
+
+.btn--ghost { background: transparent; color: var(--trust); padding: 10px 4px; }
+
+.btn-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+/* ---------- Avatar ---------- */
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--hairline);
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--ink-muted);
+}
+
+/* ---------- Empty states ---------- */
+
+.empty-state {
+  text-align: left;
+  padding: var(--space-5) 0;
+  color: var(--ink-muted);
+}
+
+.empty-state p { margin-bottom: var(--space-3); }
+
+/* ---------- Chat bubbles (contact app) ---------- */
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: var(--space-2) 0;
+}
+
+.message-bubble {
+  align-self: flex-start;
+  max-width: 70%;
+  background: var(--panel);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+
+.message-bubble--own {
+  align-self: flex-end;
+  background: var(--trust-tint);
+  border-color: var(--trust);
+}
+
+.message-bubble__meta {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  margin-bottom: 2px;
+}
+
+.message-bubble__text { margin: 0; }
+
+@media (max-width: 640px) {
+  .site-header__inner { flex-direction: column; align-items: flex-start; }
+  .ledger-row { flex-direction: column; align-items: flex-start; gap: var(--space-1); }
+}

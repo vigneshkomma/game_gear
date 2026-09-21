@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Wishlist — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>Your wishlist</h1>
+
+  {% if items %}
+    <div class="panel">
+      {% for item in items %}
+        <div class="ledger-row">
+          <div>
+            <a href="{% url 'listings:detail' item.listing.slug %}"><strong>{{ item.listing.title }}</strong></a>
+            <div style="color: var(--ink-muted); font-size:0.9rem;">{{ item.listing.get_status_display }}</div>
+          </div>
+          <span class="price-tag">{{ item.listing.price }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>Nothing saved yet — browse listings and tap the heart to add one here.</p>
+      <a href="{% url 'listings:list' %}" class="btn btn--primary">Browse listings</a>
+    </div>
+  {% endif %}
+{% endblock %}

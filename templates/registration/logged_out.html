@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Logged out — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>You're logged out</h1>
+  <p>Come back soon.</p>
+  <a href="{% url 'login' %}" class="btn btn--primary">Log back in</a>
+{% endblock %}

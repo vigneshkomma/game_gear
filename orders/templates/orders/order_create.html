@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Buy {{ listing.title }} — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>Buy {{ listing.title }}</h1>
+
+  <div class="panel">
+    <div class="ledger-row">
+      <span>Price</span>
+      <span class="price-tag">{{ listing.price }}</span>
+    </div>
+    <div class="ledger-row">
+      <span>Seller</span>
+      <span>{{ listing.seller }}</span>
+    </div>
+  </div>
+
+  <form method="post" class="panel" style="margin-top:16px;">
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="{{ form.delivery_method.id_for_label }}">Delivery method</label>
+      {{ form.delivery_method }}
+      {% if form.delivery_method.errors %}<div class="field-errors">{{ form.delivery_method.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.shipping_address.id_for_label }}">Shipping address</label>
+      {{ form.shipping_address }}
+      <div class="field-help">Leave blank for local pickup. <a href="{% url 'users:address_create' %}">Add a new address</a></div>
+      {% if form.shipping_address.errors %}<div class="field-errors">{{ form.shipping_address.errors }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="{{ form.payment_method.id_for_label }}">Payment method</label>
+      {{ form.payment_method }}
+      {% if form.payment_method.errors %}<div class="field-errors">{{ form.payment_method.errors }}</div>{% endif %}
+    </div>
+
+    <div class="btn-row">
+      <button type="submit" class="btn btn--primary">Place order</button>
+      <a href="{% url 'listings:detail' listing.slug %}" class="btn btn--secondary">Cancel</a>
+    </div>
+  </form>
+{% endblock %}

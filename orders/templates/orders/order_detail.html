@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.pk }} — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>Order #{{ order.pk }}</h1>
+
+  <div class="panel">
+    <div class="ledger-row">
+      <span>Item</span>
+      <a href="{% url 'listings:detail' order.listing.slug %}">{{ order.listing.title }}</a>
+    </div>
+    <div class="ledger-row">
+      <span>Price</span>
+      <span class="price-tag">{{ order.price }}</span>
+    </div>
+    <div class="ledger-row">
+      <span>{% if order.buyer == profile %}Seller{% else %}Buyer{% endif %}</span>
+      <span>{% if order.buyer == profile %}{{ order.seller }}{% else %}{{ order.buyer }}{% endif %}</span>
+    </div>
+    <div class="ledger-row">
+      <span>Delivery</span>
+      <span>{{ order.get_delivery_method_display }}</span>
+    </div>
+    {% if order.shipping_address %}
+      <div class="ledger-row">
+        <span>Ship to</span>
+        <span>
+          {{ order.shipping_address.full_name }}<br>
+          {{ order.shipping_address.line1 }}{% if order.shipping_address.line2 %}, {{ order.shipping_address.line2 }}{% endif %}<br>
+          {{ order.shipping_address.city }}, {{ order.shipping_address.get_state_display }} &mdash; <span class="mono">{{ order.shipping_address.pincode }}</span>
+        </span>
+      </div>
+    {% endif %}
+    <div class="ledger-row">
+      <span>Status</span>
+      {% include "orders/partials/status_control.html" %}
+    </div>
+  </div>
+
+  <div class="btn-row" style="margin-top:24px;">
+    {% if order.status != "completed" and order.status != "cancelled" %}
+      <a href="{% url 'orders:cancel' order.pk %}" class="btn btn--danger">Cancel order</a>
+    {% endif %}
+    {% if can_review %}
+      <a href="{% url 'orders:review_create' order.pk %}" class="btn btn--primary">Leave a review</a>
+    {% endif %}
+  </div>
+
+  {% if order.reviews.all %}
+    <div class="panel" style="margin-top:16px;">
+      <h3>Reviews</h3>
+      {% for review in order.reviews.all %}
+        <div class="ledger-row">
+          <div>
+            <strong>{{ review.reviewer }}</strong> &rarr; {{ review.reviewee }}
+            <div style="color: var(--ink-muted);">{{ review.comment }}</div>
+          </div>
+          <span class="mono">{{ review.rating }}/5</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Remove address — GameBazaar{% endblock %}
+{% block main_modifier %} site-main--narrow{% endblock %}
+
+{% block content %}
+  <h1>Remove this address?</h1>
+
+  <div class="panel">
+    <p>
+      <strong>{{ address.label|default:"Address" }}</strong><br>
+      {{ address.full_name }}<br>
+      {{ address.line1 }}{% if address.line2 %}, {{ address.line2 }}{% endif %}<br>
+      {{ address.city }}, {{ address.get_state_display }} &mdash; <span class="mono">{{ address.pincode }}</span>
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="btn-row">
+        <button type="submit" class="btn btn--danger">Remove address</button>
+        <a href="{% url 'users:address_list' %}" class="btn btn--secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

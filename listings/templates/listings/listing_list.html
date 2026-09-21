@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Browse — GameBazaar{% endblock %}
+
+{% block content %}
+  <h1>Browse gaming gear</h1>
+
+  <form method="get" class="panel" style="margin-bottom: 24px;">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+      <div class="field" style="flex:2; min-width:200px; margin-bottom:0;">
+        <label for="{{ search_form.q.id_for_label }}">Search</label>
+        {{ search_form.q }}
+      </div>
+      <div class="field" style="flex:1; min-width:160px; margin-bottom:0;">
+        <label for="{{ search_form.category.id_for_label }}">Category</label>
+        <select name="category" id="{{ search_form.category.id_for_label }}">
+          <option value="">All categories</option>
+          {% for top in categories %}
+            <optgroup label="{{ top.name }}">
+              {% for child in top.children.all %}
+                <option value="{{ child.slug }}" {% if request.GET.category == child.slug %}selected{% endif %}>{{ child.name }}</option>
+              {% endfor %}
+            </optgroup>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field" style="width:110px; margin-bottom:0;">
+        <label for="{{ search_form.min_price.id_for_label }}">Min &#8377;</label>
+        {{ search_form.min_price }}
+      </div>
+      <div class="field" style="width:110px; margin-bottom:0;">
+        <label for="{{ search_form.max_price.id_for_label }}">Max &#8377;</label>
+        {{ search_form.max_price }}
+      </div>
+      <div class="field" style="flex:1; min-width:140px; margin-bottom:0;">
+        <label for="{{ search_form.city.id_for_label }}">City</label>
+        {{ search_form.city }}
+      </div>
+      <button type="submit" class="btn btn--primary">Filter</button>
+    </div>
+  </form>
+
+  {% if listings %}
+    <div class="panel">
+      {% for listing in listings %}
+        <div class="ledger-row">
+          <div>
+            <a href="{% url 'listings:detail' listing.slug %}"><strong>{{ listing.title }}</strong></a>
+            <div style="color: var(--ink-muted); font-size: 0.9rem;">
+              {{ listing.category.name }} &middot; {{ listing.get_condition_display }} &middot; {{ listing.city }}
+            </div>
+          </div>
+          <span class="price-tag">{{ listing.price }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No listings match those filters yet.</p>
+    </div>
+  {% endif %}
+{% endblock %}
