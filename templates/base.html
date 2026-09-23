@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}GameBazaar{% endblock %}</title>
+  <title>{% block title %}GameGear{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
   <header class="site-header">
     <div class="site-header__inner">
-      <a class="brand" href="{% url 'listings:list' %}">Game<span>Bazaar</span></a>
+      <a class="brand" href="{% url 'listings:list' %}">Game<span>Gear</span></a>
       <nav class="site-nav">
         <a href="{% url 'listings:list' %}">Browse</a>
         {% if user.is_authenticated %}
@@ -49,7 +49,7 @@
   </main>
 
   <footer class="site-footer">
-    GameBazaar — buy and sell gaming gear, India only.
+    GameGear — buy and sell gaming gear, India only.
   </footer>
 </body>
 </html>
