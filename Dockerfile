@@ -5,9 +5,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# The project does not yet include a dependency manifest. Pin Django to the
-# version used by the project so the image remains reproducible.
-RUN pip install --no-cache-dir "Django==6.1"
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
